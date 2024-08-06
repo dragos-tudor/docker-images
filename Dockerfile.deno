@@ -1,0 +1,14 @@
+ARG IMAGE_VERSION=1.45.2
+FROM denoland/deno:$IMAGE_VERSION
+
+RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean && \
+		apt-get update && \
+		apt-get -y --no-install-recommends install ca-certificates git mkcert        
+
+RUN mkdir /home/deno && \
+		cp /etc/skel/.bashrc /home/deno && \
+		chown -R deno:deno /home/deno
+
+ENV SHELL="/bin/bash"
