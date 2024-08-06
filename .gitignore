@@ -1,0 +1,27 @@
+# IDE specific files
+.ionide/
+.vscode/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Code coverage
+**/.coverage
+**/lcov.info
+
+# .Net local packages
+.packages
+
+# Test databases
+**/*.db
+
+# API secrets
+**/prod.json
+**/secrets.json
+
+# Certificates
+.certificates
+
+# Deno
+deno.lock
