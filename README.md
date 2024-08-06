@@ -1,6 +1,7 @@
 ## Custom Docker images
 Intended to be used on development processes only.
 Usually, on CI integrations, containers based on these images should use *self-hosted* github runner agents allowing *docker-outside-of-docker* testing environments, faster *e2e* testing, so.
+These images allow switching from unoptimized caching *devcontainer features* to native docker layers caching.
 
 ### Deno Docker image
 Reasons to publish on *ghcr.io* custom Deno docker image:
