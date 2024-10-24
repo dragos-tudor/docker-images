@@ -1,5 +1,5 @@
-set -eo pipefail
-IMAGE_VERSION=1.45.2
+set -euo pipefail
+IMAGE_VERSION=${1}
 
 docker build \
   --build-arg IMAGE_VERSION=$IMAGE_VERSION \

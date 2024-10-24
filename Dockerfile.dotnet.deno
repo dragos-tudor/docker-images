@@ -1,4 +1,4 @@
-ARG DENO_IMAGE_VERSION=1.45.2
+ARG DENO_IMAGE_VERSION=2.0.2
 ARG DOTNET_SDK_IMAGE_VERSION=8.0.303
 
 FROM denoland/deno:bin-$DENO_IMAGE_VERSION AS bin-deno
@@ -8,13 +8,14 @@ RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     rm -f /etc/apt/apt.conf.d/docker-clean && \
 		apt-get update && \
-		apt-get -y --no-install-recommends install ca-certificates git mkcert
+		apt-get -y --no-install-recommends install ca-certificates git
 
 COPY --from=bin-deno /deno /usr/bin
-ARG DENO_DIR=/deno-dir
-RUN mkdir $DENO_DIR && \
-    chown -R app:app $DENO_DIR && \
-    echo "DENO_DIR=$DENO_DIR" >> ~/.bashrc
+ARG DENO_CACHE=/home/app/.deno-cache
+RUN mkdir $DENO_CACHE && \
+    chown -R app:app $DENO_CACHE
 
 ENV SHELL="/bin/bash"
+ENV DENO_DIR=$DENO_CACHE
+
 USER app

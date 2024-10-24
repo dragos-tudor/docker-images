@@ -1,15 +1,24 @@
-ARG IMAGE_VERSION=1.45.2
+ARG IMAGE_VERSION=2.0.2
 FROM denoland/deno:$IMAGE_VERSION
 
 RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     rm -f /etc/apt/apt.conf.d/docker-clean && \
 		apt-get update && \
-		apt-get -y --no-install-recommends install ca-certificates git mkcert
+		apt-get -y --no-install-recommends install ca-certificates git
 
-RUN mkdir /home/deno && \
-		cp /etc/skel/.bashrc /home/deno && \
-		chown -R deno:deno /home/deno
+ARG USER=app
+ARG GROUP=app
+ARG USER_HOME="/home/$USER"
+RUN groupadd -g 1000 $USER && \
+    useradd -m -d $USER_HOME -s /bin/bash -g 1000 -u 1000 $GROUP
+
+ARG DENO_CACHE=$USER_HOME/.deno-cache
+RUN mkdir $DENO_CACHE && \
+    chown $USER:$GROUP $DENO_CACHE && \
+    rm -rf /deno-dir
 
 ENV SHELL="/bin/bash"
-USER deno
+ENV DENO_DIR=$DENO_CACHE
+
+USER $USER
